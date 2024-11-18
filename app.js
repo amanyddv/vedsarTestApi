@@ -13,7 +13,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "testApi/uploads/");
+    cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
@@ -53,10 +53,12 @@ app.get("/info", async (req, res) => {
   }
 });
 
-app.post("/deleteUser", async (req, res) => {
-  console.log(req.body);
+app.delete('/deleteUser/:id', async (req, res) => {
+  const { id } = req.params;
+  console.log(id)
+
   try {
-    const deletedData = await UserData.findByIdAndDelete(req.body.id);
+    const deletedData = await UserData.findByIdAndDelete(id);
     if (!deletedData) {
       return res.json({ error: "Data not found" });
     }
